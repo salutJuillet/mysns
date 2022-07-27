@@ -17,7 +17,7 @@
                     <input id="img-fileExt" type="hidden" name="fileExt" />
                     <input id="img" type="file" accept="image/*" />
                 </div>
-                <div class="col text-end py-1">
+                <div class="col text-end py-1 mt-1">
                     <button type="submit" class="btn btn-dark">등록</button>
                 </div>
         </div>
@@ -164,6 +164,7 @@
         })
     }
 
+    /* 팔로잉 */
     document.querySelectorAll('.follower').forEach(function(tag){
         tag.addEventListener('click', ()=>{
             const myId = document.querySelector('#my-id');
