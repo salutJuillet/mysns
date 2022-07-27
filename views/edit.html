@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% if user and user.email %}
+    <!-- 글쓰기 -->
+    <form id="editForm" action="/edit/update/{{post.dataValues.id}}" method="post" enctype="multipart/form-data" class="input-form my-5 border-1">
+        <div class="p-4 border border-5 border-dark main">
+            <textarea class="form-control " rows="5" name="content" maxlength="200" style="border-top-right-radius:20px;">{{post.dataValues.content}}</textarea>
+            <div class="row mt-1">
+                <div class="col py-2">
+                    <img src="{{post.dataValues.img}}" id="img-preview" width="250" alt="미리보기">
+                    <input id="img-url" type="hidden" name="url" />
+                    <input id="img-filename" type="hidden" name="filename" />
+                    <input id="img-originalname" type="hidden" name="originalname" />
+                    <input id="img-fileExt" type="hidden" name="fileExt" />
+                    <input id="img" type="file" accept="image/*" class="mt-2" />
+                </div>
+                <div class="col text-end py-1">
+                    <button onClick="{()=>{location.href='/'}}" class="btn btn-outline-dark edit-cancel">취소</button>
+                    <button type="submit" class="btn btn-dark">등록</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- /글쓰기-->
+    {% endif %}
+
+    <!-- 검색 -->
+    <div class="row justify-content-end mt-5">
+        <div class="col-4">
+            <form name="search" action="/hashtag">
+                <div class="input-group">
+                    <input type="search" name="hashtag" class="form-control input-search" placeholder="search">
+                    <button class="btn btn-outline-secondary search-btn">
+                        <span class="material-symbols-outlined align-bottom">search</span>
+                    </button>    
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /검색 -->
+
+{% endblock %}
+
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js" integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    if(document.getElementById('img')){
+        document.getElementById('img').addEventListener('change', function(e){
+            const formData = new FormData();
+            // console.log(this, this.files);
+            formData.append('img', this.files[0]);
+            axios.post('/post/img', formData)
+            .then((res)=>{
+                console.dir(res.data);
+                document.getElementById('img-url').value = res.data.url;
+                document.getElementById('img-preview').src = res.data.url;
+                document.getElementById('img-preview').style.display = 'inline';
+                document.getElementById('img-filename').value = res.data.filename;
+                document.getElementById('img-originalname').value = res.data.originalname;
+                document.getElementById('img-fileExt').value = res.data.fileExt;
+            })
+            .catch((err)=>{
+                console.error(err);
+            });
+        })
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="card my-5 p-4 border border-5 border-dark main">
+    <div class="card-body text-center">
+        <div class="home-btn bg-dark">
+            <a href="/"><i class="fa-solid fa-house-chimney"></i></a>
+        </div>
+        <figure class="bg-light" style="padding-top:10px">
+            {% if user.img %}
+            <img src="/../uploads/{{user.img}}" class="img-fluid" alt="{{user.nick}}">
+            {% else %}
+            <img src="/images/profile.jpg" class="img-fluid" alt="{{user.nick}}">
+            {% endif %}
+        </figure>
+        <h3>{{user.nick}} 님</h3>
+        <p>가입일: {{user.createdAt}}, 최근로그인: {{user.updatedAt}}</p>
+        <ul class="d-flex">
+            <li><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
+            <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+        </ul>
+        <ul class="d-flex">
+            <li>
+                <label>팔로잉</label>
+                {% if user.Followings %}
+                    {% for following in user.Followings %}
+                    <div>{{following.nick}}</div>
+                    {% endfor %}
+                {% else %}
+                <div>팔로잉한 유저가 없습니다.</div>
+                {% endif %}
+            </li>
+            <li>
+                <label>팔로워</label>
+                {% if user.Followers %}
+                    {% for follower in user.Followers %}
+                    <div>{{follower.nick}}</div>
+                    {% endfor %}
+                {% else %}
+                <div>팔로워가 없습니다.</div>
+                {% endif %}
+            </li>
+        </ul>
+        <input id="my-id" type="hidden" value="{{user.id}}">
+        <p class="mb-5">
+            <a href="/auth/logout">로그아웃</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+<!-- {% block script %}
+<script>
+    const showDate = (date) => {
+        const year = getFullYear(date);
+        const month = getMonth(date) + 1;
+        const day = getDate(date);
+        return `${year}-${month}-${day}`;
+    }
+</script>
+{% endblock %} -->

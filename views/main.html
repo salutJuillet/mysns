@@ -1,0 +1,187 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% if user and user.email %}
+    <!-- 글쓰기 -->
+    <form id="writeForm" action="/post" method="post" enctype="multipart/form-data" class="input-form my-5 border-1">
+        <div class="p-4 border border-5 border-dark main">
+            <textarea class="form-control " rows="5" name="content" maxlength="200" style="border-top-right-radius:20px;"></textarea>
+        <!-- </div>
+        <div class="p-4 bg-light border border-top-0 border-dark"> -->
+            <div class="row">
+                <div class="col py-2">
+                    <img src="" id="img-preview" style="display:none" width="250" alt="미리보기" class="mb-2">
+                    <input id="img-url" type="hidden" name="url" />
+                    <input id="img-filename" type="hidden" name="filename" />
+                    <input id="img-originalname" type="hidden" name="originalname" />
+                    <input id="img-fileExt" type="hidden" name="fileExt" />
+                    <input id="img" type="file" accept="image/*" />
+                </div>
+                <div class="col text-end py-1">
+                    <button type="submit" class="btn btn-dark">등록</button>
+                </div>
+        </div>
+    </form>
+    <!-- /글쓰기-->
+    
+
+    <!-- 검색 -->
+    <div class="row justify-content-end mt-5">
+        <div class="col-4">
+            <form name="search" action="/hashtag">
+                <div class="input-group">
+                    <input type="search" name="hashtag" class="form-control input-search" placeholder="search">
+                    <button class="btn btn-outline-secondary search-btn">
+                        <span class="material-symbols-outlined align-bottom">search</span>
+                    </button>    
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /검색 -->
+
+    <ul class="list-group mt-3" style="border-bottom-right-radius:20px;">
+        {% if lists %}
+            {% for list in lists %}
+            <li class="list-group-item p-4">
+                <input type="hidden" value="{{list.User.id}}" class="umid">
+                <input type="hidden" value="{{list.id}}" class="uid">
+                
+                <div class="d-flex justify-content-between">
+                    <div class="sns-author mb-2">
+                        {{list.User.nick}}
+                        {% if not followerIdList.includes(list.User.id) and list.User.id !== user.id %}
+                        <button class="btn btn-outline-primary follower">팔로우</button>
+                        {% endif %}
+                    </div>
+
+                    <!-- 수정/삭제 dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" type="button" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li class="lh-1"><a href="/edit/{{list.id}}" class="dropdown-item">수정</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="lh-1"><a href="javascript:void(0)" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deletePostModal">삭제</a></li>
+                        </ul>
+                    </div>
+                    <!-- /수정/삭제 dropdown -->
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body my-3">
+                                해당 게시물을 삭제하시겠습니까?
+                            </div>
+                            <div class="modal-footer border-top-0">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <button type="button" class="btn btn-primary" onClick="location.href='/post/{{list.id}}';">삭제</button>
+                            <!-- <button type="button" class="btn btn-primary" onClick="top.location='javascript:location.reload()'" href="/post/{{list.id}}">삭제</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+                {% if list.img %}
+                <img src="{{list.img}}" class="img-thumbnail d-block my-3 mx-auto" alt="썸네일">
+                {% endif %}
+                <p class="sns-content">{{list.content}}</p>
+            </li>
+            {% endfor %}
+        {% else %}
+        <h1>환영합니다!</h1>
+        {% endif%}
+    </ul>
+    {% else %}
+    <!-- 검색 -->
+    <div class="row justify-content-end mt-5">
+        <div class="col-4">
+            <form name="search" action="/hashtag">
+                <div class="input-group">
+                    <input type="search" name="hashtag" class="form-control input-search" placeholder="search">
+                    <button class="btn btn-outline-secondary search-btn">
+                        <span class="material-symbols-outlined align-bottom">search</span>
+                    </button>    
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /검색 -->
+
+    <ul class="list-group mb-5 border border-5 border-dark main">
+        {% if lists %}
+            {% for list in lists %}
+            <li class="list-group-item p-4">
+                <input type="hidden" value="{{list.User.id}}" class="umid">
+                <input type="hidden" value="{{list.id}}" class="uid">
+                <div class="sns-author mb-2">
+                    {{list.User.nick}}
+                    <button class="btn btn-outline-primary follower" >팔로우</button>
+                </div>
+                
+
+                {% if list.img %}
+                <img src="{{list.img}}" class="img-thumbnail d-block my-3 mx-auto" alt="썸네일">
+                {% endif %}
+                <p class="sns-content">{{list.content}}</p>
+            </li>
+            {% endfor %}
+        {% else %}
+        <h1>환영합니다!</h1>
+        {% endif%}
+    </ul>
+    {% endif %}
+{% endblock %}
+
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js" integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    if(document.getElementById('img')){
+        document.getElementById('img').addEventListener('change', function(e){
+            const formData = new FormData();
+            // console.log(this, this.files);
+            formData.append('img', this.files[0]);
+            axios.post('/post/img', formData)
+            .then((res)=>{
+                console.dir(res.data);
+                document.getElementById('img-url').value = res.data.url;
+                document.getElementById('img-filename').value = res.data.filename;
+                document.getElementById('img-originalname').value = res.data.originalname;
+                document.getElementById('img-fileExt').value = res.data.fileExt;
+                document.getElementById('img-preview').src = res.data.url;
+                document.getElementById('img-preview').style.display = 'inline';
+            })
+            .catch((err)=>{
+                console.error(err);
+            });
+        })
+    }
+
+    document.querySelectorAll('.follower').forEach(function(tag){
+        tag.addEventListener('click', ()=>{
+            const myId = document.querySelector('#my-id');
+            if(myId){
+                const userId = tag.parentNode.querySelector('.umid').value;
+                if(userId !== myId.value){ //본인을 팔로우할 수 없게
+                    if(confirm('팔로잉하시겠습니까?')){
+                        axios.post(`/user/${userId}/follow`)
+                        .then(()=>{
+                            location.reload();
+                        })
+                        .catch((err)=>{
+                            console.error(err);
+                        })
+                    }
+                }
+            }
+        })
+    });
+</script>
+{% endblock %}
