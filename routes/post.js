@@ -72,7 +72,7 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next)=>{
 
 /* 게시물 삭제 */
 router.get('/:id', async (req, res, next)=>{ //왜 delete가 아니라 get으로 했을 때 삭제가 되는거지...?
-    // try{
+    try{
         const post = await Post.findOne({
             where: {id: req.params.id}
         })
@@ -89,14 +89,14 @@ router.get('/:id', async (req, res, next)=>{ //왜 delete가 아니라 get으로
             //     }
             // }
         // }
-        // const result = await Post.destroy({
-        //     where:{id: req.params.id}
-        // });
-        // res.redirect('/');
-    // }catch(err){
-    //     console.error(err);
-    //     next(err);
-    // }
+        const result = await Post.destroy({
+            where:{id: req.params.id}
+        });
+        res.redirect('/');
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
 });
 
 
