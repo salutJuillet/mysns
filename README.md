@@ -8,7 +8,7 @@
 # mysns
 
 <div align="center">
-  <img src="admin/public/images/my-another-blog-preview-01.png" width="400px"/>
+  <img src="public/images/my-another-blog-preview-01.png" width="400px"/>
 </div>
 
 자유롭게 포스트 작성, 수정, 삭제가 가능한 SNS입니다.
