@@ -8,9 +8,10 @@
 # mysns
 
 <div align="center">
-  <img src="public/images/preview.png" width="700px"/>
+  <img src="public/images/preview.png" width="700px"/> <br/>
+  <a href="https://youtu.be/asSUHK-f7Vg" target="_blank">https://youtu.be/asSUHK-f7Vg</a>
 </div>
-
+<br/><br/>
 자유롭게 포스트 작성, 수정, 삭제가 가능한 SNS입니다.
 <br/><br/>
 
